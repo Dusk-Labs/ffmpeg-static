@@ -18,6 +18,9 @@ sudo apt-get -y --force-yes install \
   libtheora-dev \
   libtool \
   libva-dev \
+  libva2 \
+  libva-drm2 \
+  libffmpeg-nvenc-dev \
   libvdpau-dev \
   libvo-amrwbenc-dev \
   libvorbis-dev \
@@ -42,4 +45,3 @@ if [ $need_ppa -eq 1 ]; then
 fi
 
 ./build.sh "$@"
-
