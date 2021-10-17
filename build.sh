@@ -199,9 +199,22 @@ download \
   "8c52b3e3926fdbac1e7be3761035741d" \
   "https://github.com/FFmpeg/FFmpeg/archive"
 
+download \
+  "libva-2.13.0.tar.bz2" \
+  "libva.tar.bz2" \
+  "2adb2c023371dd68fe0d23e58afcf0b072b79828" \
+  "https://github.com/intel/libva/releases/download/2.13.0/"
+
 [ $download_only -eq 1 ] && exit 0
 
 TARGET_DIR_SED=$(echo $TARGET_DIR | awk '{gsub(/\//, "\\/"); print}')
+
+echo "*** Building libva ***"
+cd $BUILD_DIR/libva*
+[ $rebuild -eq 1 -a -f Makefile ] && make distclane || true
+./configure --prefix=$TARGET_DIR --disable-shared
+make -j $jval
+make install
 
 if [ $is_x86 -eq 1 ]; then
     echo "*** Building yasm ***"
@@ -365,31 +378,25 @@ cd $BUILD_DIR/FFmpeg*
 
 if [ "$platform" = "linux" ]; then
   [ ! -f config.status ] && PATH="$BIN_DIR:$PATH" \
-  PKG_CONFIG_PATH="$TARGET_DIR/lib/pkgconfig" ./configure \
+  ./configure \
     --prefix="$TARGET_DIR" \
     --pkg-config-flags="--static" \
-    --extra-cflags="-I$TARGET_DIR/include" \
-    --extra-ldflags="-L$TARGET_DIR/lib" \
+    --extra-cflags="-I/usr/local/include" \
+    --extra-ldflags="-L/usr/lib" \
     --extra-libs="-lpthread -lm -lz" \
     --extra-ldexeflags="-static" \
     --bindir="$BIN_DIR" \
     --enable-pic \
     --enable-fontconfig \
-    --enable-frei0r \
     --enable-gpl \
     --enable-version3 \
     --enable-libass \
-    --enable-libfribidi \
     --enable-libfdk-aac \
     --enable-libfreetype \
     --enable-libmp3lame \
-    --enable-libopencore-amrnb \
-    --enable-libopencore-amrwb \
     --enable-libopenjpeg \
     --enable-libopus \
-    --enable-librtmp \
     --enable-libtheora \
-    --enable-libvo-amrwbenc \
     --enable-libvorbis \
     --enable-libvpx \
     --enable-libwebp \
@@ -399,7 +406,9 @@ if [ "$platform" = "linux" ]; then
     --enable-nonfree \
     --enable-openssl \
     --enable-nvdec \
-    --enable-nvenc
+    --enable-nvenc \
+    --enable-vaapi
+
 elif [ "$platform" = "darwin" ]; then
   [ ! -f config.status ] && PATH="$BIN_DIR:$PATH" \
   PKG_CONFIG_PATH="${TARGET_DIR}/lib/pkgconfig:/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig:/usr/local/Cellar/openssl/1.0.2o_1/lib/pkgconfig" ./configure \
