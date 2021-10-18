@@ -24,7 +24,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      - run: ./build-ubuntu.sh
+      - run: chmod +x ./build-ubuntu.sh && ./build-ubuntu.sh
         
       - uses: actions/upload-artifact@v2
         with: 
