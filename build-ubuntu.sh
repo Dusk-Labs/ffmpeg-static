@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/bash
 
 #This script will compile and install a static ffmpeg build with support for nvenc un ubuntu.
 #See the prefix path and compile options if edits are needed to suit your needs.
