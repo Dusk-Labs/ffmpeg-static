@@ -264,11 +264,7 @@ compileFfmpeg(){
       --enable-nonfree \
       --enable-libaom \
       --enable-nvenc \
-      --enable-nvdec \
-      --enable-cuda \
-      --enable-cuda-sdk \
-      --enable-cuvid \
-      --enable-libnpp
+      --enable-nvdec
     Make install distclean
     hash -r
 }
@@ -292,7 +288,6 @@ compileLibAss
 compileFfmpeg
 
 mkdir bin/
-cp target/bin/ffmpeg bin/ffmpeg
-cp target/bin/ffprobe bin/ffprobe
+cp $DEST_DIR/bin/* bin/
 
 echo "Complete!"
