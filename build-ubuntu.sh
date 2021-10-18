@@ -292,6 +292,7 @@ compileLibAss
 compileFfmpeg
 
 mkdir bin/
-cp target/bin/* bin/
+cp target/bin/ffmpeg bin/ffmpeg
+cp target/bin/ffprobe bin/ffprobe
 
 echo "Complete!"
