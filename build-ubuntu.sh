@@ -51,7 +51,7 @@ installAptLibs() {
     sudo apt-get -y --force-yes install $PKGS \
       build-essential pkg-config texi2html software-properties-common \
       libfreetype6-dev libgpac-dev libsdl1.2-dev libtheora-dev libva-dev \
-      libvdpau-dev libvorbis-dev libxcb1-dev libxcb-shm0-dev libxcb-xfixes0-dev zlib1g-dev
+      libvorbis-dev zlib1g-dev
 }
 
 installYumLibs() {
@@ -222,7 +222,7 @@ compileLibVpx() {
     --enable-postproc --enable-vp9-postproc --enable-multi-res-encoding --enable-webm-io --enable-better-hw-compatibility \
     --enable-vp9-highbitdepth --enable-onthefly-bitpacking --enable-realtime-only \
     --cpu=native --as=nasm --disable-docs
-    Make install clean
+    Make install
 }
 
 compileLibAss() {
@@ -233,7 +233,16 @@ compileLibAss() {
     cd "libass-$LASS_VERSION"
     autoreconf -fiv
     ./configure --prefix="$DEST_DIR" --disable-shared
-    Make install distclean
+    Make install
+}
+
+compileLibHarfbuzz() {
+    echo "Compiling libharfbuzz"
+    cd "$WORK_DIR/"
+    Clone https://github.com/harfbuzz/harfbuzz -b main
+    ./autogen.sh
+    ./configure --prefix="$DEST_DIR" --disable-shared
+    Make install
 }
 
 compileFfmpeg(){
@@ -249,7 +258,9 @@ compileFfmpeg(){
       --extra-cflags="-I $DEST_DIR/include -I $CUDA_DIR/include/" \
       --extra-ldflags="-L $DEST_DIR/lib -L $CUDA_DIR/lib64/" \
       --extra-libs="-lpthread" \
+      --disable-autodetect \
       --enable-gpl \
+      --enable-nonfree \
       --enable-libass \
       --enable-libfdk-aac \
       --enable-vaapi \
@@ -261,10 +272,13 @@ compileFfmpeg(){
       --enable-libvpx \
       --enable-libx264 \
       --enable-libx265 \
-      --enable-nonfree \
       --enable-libaom \
+      --enable-pthreads \
       --enable-nvenc \
-      --enable-nvdec
+      --enable-nvdec \
+      --enable-ffnvcodec \
+      --enable-cuda \
+      --enable-cuda-sdk
     Make install distclean
     hash -r
 }
@@ -285,9 +299,10 @@ compileLibOpus
 compileLibAss
 # TODO: libogg
 # TODO: libvorbis
+compileLibHarfbuzz
 compileFfmpeg
 
-mkdir bin/
-cp $DEST_DIR/bin/* bin/
+mkdir $ENV_ROOT/bin/
+cp $DEST_DIR/bin/* $ENV_ROOT/bin/
 
 echo "Complete!"
