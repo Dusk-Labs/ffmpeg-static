@@ -26,10 +26,11 @@ jobs:
       - uses: actions/checkout@v2
       - run: chmod +x ./build-ubuntu.sh && ./build-ubuntu.sh
       - run: cp target/bin/* bin/
+      - run: ls bin/
         
       - uses: actions/upload-artifact@v2
         with: 
           name: bins
           path: |
-            bin/ffmpeg
-            bin/ffprobe
+            ffmpeg
+            ffprobe
