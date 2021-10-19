@@ -51,7 +51,7 @@ installAptLibs() {
     sudo apt-get -y --force-yes install $PKGS \
       build-essential pkg-config texi2html software-properties-common \
       libfreetype6-dev libgpac-dev libsdl1.2-dev libtheora-dev libva-dev \
-      libvorbis-dev zlib1g-dev
+      libvorbis-dev zlib1g-dev ragel libfribidi0
 }
 
 installYumLibs() {
@@ -222,7 +222,7 @@ compileLibVpx() {
     --enable-postproc --enable-vp9-postproc --enable-multi-res-encoding --enable-webm-io --enable-better-hw-compatibility \
     --enable-vp9-highbitdepth --enable-onthefly-bitpacking --enable-realtime-only \
     --cpu=native --as=nasm --disable-docs
-    Make install
+    Make install distclean
 }
 
 compileLibAss() {
@@ -233,7 +233,7 @@ compileLibAss() {
     cd "libass-$LASS_VERSION"
     autoreconf -fiv
     ./configure --prefix="$DEST_DIR" --disable-shared
-    Make install
+    Make install distclean
 }
 
 compileLibHarfbuzz() {
