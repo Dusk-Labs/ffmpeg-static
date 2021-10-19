@@ -51,7 +51,7 @@ installAptLibs() {
     sudo apt-get -y --force-yes install $PKGS \
       build-essential pkg-config texi2html software-properties-common \
       libfreetype6-dev libgpac-dev libsdl1.2-dev libtheora-dev libva-dev \
-      libvorbis-dev zlib1g-dev ragel libfribidi0
+      libvorbis-dev zlib1g-dev ragel libfribidi0 libfribidi-dev
 }
 
 installYumLibs() {
